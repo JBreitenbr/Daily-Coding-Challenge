@@ -187,3 +187,13 @@ function isSpam(number) {
 }
 isSpam("+0 (200) 234-0182");
 
+/* 28-09-2025: CSV Header Parser
+Given the first line of a comma-separated values (CSV) file, return an array containing the headings.
+
+The first line of a CSV file contains headings separated by commas.
+Remove any leading or trailing whitespace from each heading.
+*/
+
+function getHeadings(csv) {
+  return csv.split(",").map((item)=>item.trim());
+}
