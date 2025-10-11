@@ -628,3 +628,29 @@ Remove any leading or trailing whitespace from each heading.
 function getHeadings(csv) {
   return csv.split(",").map((item)=>item.trim());
 }
+
+/* 29-09-2025: Longest Word
+Given a sentence, return the longest word in the sentence.
+
+Ignore periods (.) when determining word length.
+If multiple words are ties for the longest, return the first one that occurs.
+*/
+
+function getLongestWord(sentence) {
+  let s=sentence.split(" ").map((item)=>item.replace(".","")).sort((a,b)=>b.length-a.length).slice(0,1);
+  return s;
+}
+getLongestWord("coding is fun")
+
+/* 30-09-2025: Phone Number Formatter
+Given a string of ten digits, return the string as a phone number in this format: "+D (DDD) DDD-DDDD".
+*/
+
+function formatNumber(number) {
+  let n=number;
+  let stri="+"+n[0]+" ";
+  stri+="("+n.slice(1,4).toString()+") ";
+  stri+=n.slice(4,7)+"-";
+  stri+=n.slice(7,11).toString();
+  return stri;
+}
