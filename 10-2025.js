@@ -289,3 +289,97 @@ function hexToDecimal(hex) {
    return c;
 }
 hexToDecimal("2E");
+
+/* 12-10-2025: Battle of Words
+Given two sentences representing your team and an opposing team, where each word from your team battles the corresponding word from the opposing team, determine which team wins using the following rules:
+
+The given sentences will always contain the same number of words.
+Words are separated by a single space and will only contain letters.
+The value of each word is the sum of its letters.
+Letters a to z correspond to the values 1 through 26. For example, a is 1, and z is 26.
+A capital letter doubles the value of the letter. For example, A is 2, and Z is 52.
+Words battle in order: the first word of your team battles the first word of the opposing team, and so on.
+A word wins if its value is greater than the opposing word's value.
+The team with more winning words is the winner.
+Return "We win" if your team is the winner, "We lose" if your team loses, and "Draw" if both teams have the same number of wins.
+*/
+
+function compArr(arr1,arr2){
+  let s1=0;
+  let s2=0;
+  for(let i=0;i<arr1.length;i++){
+    if(arr1[i]>arr2[i]){
+      s1+=1;
+    }
+    if(arr2[i]>arr1[i]){
+      s2+=1;
+    }
+  }
+  return [s1,s2];
+}
+
+function battle(ourTeam, opponent) {
+  let alph1="abcdefghijklmnopqrstuvwxyz".split("");
+  let alph2=alph1.join("").toUpperCase().split("");
+  let arr1=alph1.map((item,index)=>index+1);
+  let arr2=alph2.map((item,index)=>2*index+2);  
+  let res = {};
+  alph1.forEach((key, index) => {res[key] = arr1[index];});
+  alph2.forEach((key, index)=>{res[key]=arr2[index];});
+  let stri1=ourTeam.split(" "); 
+  let stri2=opponent.split(" ");
+  let t1=stri1.map((item)=>item.split("").map((sub)=>res[sub]));
+  let r1=t1.map((item)=>item.reduce((a,b)=>a+b,0));
+  let t2=stri2.map((item)=>item.split("").map((sub)=>res[sub]));
+  let r2=t2.map((item)=>item.reduce((a,b)=>a+b,0));
+  let c=compArr(r1,r2);
+  return c[0]>c[1]?"We win":c[0]<c[1]?"We lose":"Draw";
+}
+//battle("hello world", "hello word");
+battle("We must never surrender", "Our team must win");
+
+/* 13-10-2025: 24 to 12
+Given a string representing a time of the day in the 24-hour format of "HHMM", return the time in its equivalent 12-hour format of "H:MM AM" or "H:MM PM".
+
+The given input will always be a four-digit string in 24-hour time format, from "0000" to "2359".
+*/
+
+function to12(time) {
+  let p1=time.slice(0,2);
+  let p2=time.slice(2,4);
+  let t1=Number(p1)>12?(Number(p1)%12).toString():p1=="00"?"12":p1<10?p1.slice(1,2):p1;
+  let d=Number(p1)>12?"PM":"AM";
+  return t1+":"+p2+" "+d;
+}
+to12("0030")
+  
+/* 14-10-2025: String Count
+Given two strings, determine how many times the second string appears in the first.
+
+The pattern string can overlap in the first string. For example, "aaa" contains "aa" twice. The first two a's and the second two.
+*/
+
+function count(text, pattern) {
+  let l=pattern.length;
+  let sn=0;
+  for(let i=0;i<text.length-l+1;i++){
+    if(text.slice(i,i+l)==pattern){
+      sn+=1;
+    }
+  }
+  return sn;
+}
+
+/* 15-10-2025: HTML Tag Stripper
+Given a string of HTML code, remove the tags and return the plain text content.
+
+The input string will contain only valid HTML.
+HTML tags may be nested.
+Remove the tags and any attributes.
+For example, '<a href="#">Click here</a>' should return "Click here".
+*/
+
+function stripTags(html) {
+  let txt=html.replace(/<[^>]*>/g,"");
+  return txt;
+}
