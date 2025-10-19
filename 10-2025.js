@@ -383,3 +383,114 @@ function stripTags(html) {
   let txt=html.replace(/<[^>]*>/g,"");
   return txt;
 }
+
+/* 16-10-2025: Email Validator
+Given a string, determine if it is a valid email address using the following constraints:
+
+It must contain exactly one @ symbol.
+The local part (before the @):
+Can only contain letters (a-z, A-Z), digits (0-9), dots (.), underscores (_), or hyphens (-).
+Cannot start or end with a dot.
+The domain part (after the @):
+Must contain at least one dot.
+Must end with a dot followed by at least two letters.
+Neither the local or domain part can have two dots in a row.
+*/
+
+function validate(email) {
+  let l="abcdefghijklmnopqrstuvwxyz"; let v0=l+l.toUpperCase()+"0123456789"+"-"+"_"+".";
+  let v=v0.split("");
+  let alph=v0.slice(0,52).split("");
+  let p=email.split("@");
+  if(p.length!=2){
+    return false;
+  }
+  let d=email.split(".");
+  let flt=d.filter((item)=>item.length!=0);
+  if(flt.length<d.length){
+    return false;
+  }
+  let p1=p[0];
+  let p2=p[1];
+  let ls=p2.split(".")[1];
+  if(p1[0]=="." ||p1[p1.length-1]=="."){
+    return false;
+  }
+  let flt2=ls.split("").filter((item)=>!alph.includes(item))
+  ;
+  if(flt2.length){
+    return false;
+  }
+  return true;
+}
+validate("example@test.c0")
+//validate("hello@world..com")
+//validate("git@commit@push.io")
+
+/* 17-10-2025: Credit Card Masker
+Given a string of credit card numbers, return a masked version of it using the following constraints:
+
+The string will contain four sets of four digits (0-9), with all sets being separated by a single space, or a single hyphen (-).
+Replace all numbers, except the last four, with an asterisk (*).
+Leave the remaining characters unchanged.
+For example, given "4012-8888-8888-1881" return "****-****-****-1881".
+*/
+
+function mask(card) {
+  let sp=card.includes("-")?card.split("-"):card.split(" ");
+  let mk=sp.map((item,index)=>index<3?"****":item);
+  return card.includes("-")?mk.join("-"):mk.join(" ");
+}
+
+/* 18-10-2025: Missing Socks
+Given an integer representing the number of pairs of socks you started with, and another integer representing how many wash cycles you have gone through, return the number of complete pairs of socks you currently have using the following constraints:
+
+Every 2 wash cycles, you lose a single sock.
+Every 3 wash cycles, you find a single missing sock.
+Every 5 wash cycles, a single sock is worn out and must be thrown away.
+Every 10 wash cycles, you buy a pair of socks.
+You can never have less than zero total socks.
+Rules can overlap. For example, on wash cycle 10, you will lose a single sock, throw away a single sock, and buy a new pair of socks.
+Return the number of complete pairs of socks.
+*/
+
+function sockPairs(pairs, cycles) {
+  let s=pairs*2;
+  s=s-Math.floor(cycles/2);
+  s=s+Math.floor(cycles/3);
+  s=s-Math.floor(cycles/5);
+  s=s+Math.floor(cycles/10)*2;
+  if(s<0){
+    return 0;
+  }
+  let p=s%2==0?s/2:Math.floor(s/2);
+  return p;
+}
+sockPairs(1,2);
+
+/* 19-10-2025: HTML Attribute Extractor
+Given a string of a valid HTML element, return the attributes of the element using the following criteria:
+
+You will only be given one element.
+Attributes will be in the format: attribute="value".
+Return an array of strings with each attribute property and value, separated by a comma, in this format: ["attribute1, value1", "attribute2, value2"].
+Return attributes in the order they are given.
+If no attributes are found, return an empty array.
+*/
+
+/* I used the article on "https://www.codemzy.com/blog/get-html-attributes-regex" to find the regular expression used to match */ 
+function extractAttributes(element) {
+  let sp=element.match(/[\w-]+=".+?"/gm);
+  if(!sp){
+    return [];
+  };
+  let res=[];
+  for(let i=0;i<sp.length;i++)
+  {
+    let w=sp[i].split("=");
+  let stri=w[0]+", "+w[1].replaceAll('\"',"");
+  res.push(stri);
+  }
+  return res;
+}
+extractAttributes('<input name="email" type="email" required="true" />');
