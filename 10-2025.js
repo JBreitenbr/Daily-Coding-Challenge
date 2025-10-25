@@ -525,3 +525,114 @@ function calculateTips(mealPrice, customTip) {
 }
 calculateTips("$10.00", "25%") ;
 //calculateTips("$89.67", "26%")
+
+/* 21-10-2025: Thermostat Adjuster 2
+Given the current temperature of a room in Fahrenheit and a target temperature in Celsius, return a string indicating how to adjust the room temperature based on these constraints:
+
+Return "Heat: X degrees Fahrenheit" if the current temperature is below the target. With X being the number of degrees in Fahrenheit to heat the room to reach the target, rounded to 1 decimal place.
+Return "Cool: X degrees Fahrenheit" if the current temperature is above the target. With X being the number of degrees in Fahrenheit to cool the room to reach the target, rounded to 1 decimal place.
+Return "Hold" if the current temperature is equal to the target.
+To convert Celsius to Fahrenheit, multiply the Celsius temperature by 1.8 and add 32 to the result (F = (C * 1.8) + 32).
+*/
+
+function adjustThermostat(currentF, targetC) {
+let targetF = (targetC * 1.8) + 32;
+  let diff=(Math.round(10*(targetF-currentF))/10).toString();
+  diff=diff.includes(".")?diff:diff+".0";
+  return diff>0?`Heat: ${diff} degrees Fahrenheit`:diff<0?`Cool: ${-diff} degrees Fahrenheit`:"Hold";
+}
+adjustThermostat(72, 18)
+
+/* 22-10-2025: Speak Wisely, You Must
+Given a sentence, return a version of it that sounds like advice from a wise teacher using the following rules:
+
+Words are separated by a single space.
+Find the first occurrence of one of the following words in the sentence: "have", "must", "are", "will", "can".
+Move all words before and including that word to the end of the sentence and:
+Preserve the order of the words when you move them.
+Make them all lowercase.
+And add a comma and space before them.
+Capitalize the first letter of the new first word of the sentence.
+All given sentences will end with a single punctuation mark. Keep the original punctuation of the sentence and move it to the end of the new sentence.
+Return the new sentence, make sure there's a single space between each word and no spaces at the beginning or end of the sentence.
+For example, given "You must speak wisely." return "Speak wisely, you must."
+*/
+
+function wiseSpeak(sentence) {
+let w=["have", "must", "are", "will", "can"];
+let s=sentence.split(" ");
+let t=s.map((x, i) => [x,i]).filter(([x,i]) => w.includes(x)).map(([x,i]) => i)[0];
+console.log(t);
+let s1=s.slice(t+1).concat(s.slice(0,t+1));
+let s2=s1.map((item)=>item.toLowerCase()).map((item)=>item.replace(".",",")).map((item)=>item.replace("!",",")).map((item)=>item.replace("?",",")).map((item,index)=>index>0?item:item[0].toUpperCase()+item.slice(1));
+let last=sentence.split("").reverse()[0];
+let stri=s2.join(" ")+last;
+  return stri;
+}
+wiseSpeak("You can do it!")
+
+/* 23-10-2025: Favorite Songs
+Remember iPods? The first model came out 24 years ago today, on Oct. 23, 2001.
+
+Given an array of song objects representing your iPod playlist, return an array with the titles of the two most played songs, with the most played song first.
+
+Each object will have a "title" property (string), and a "plays" property (integer).
+*/
+
+function favoriteSongs(playlist) {
+  let pl=playlist.sort((a,b)=>b.plays-a.plays);
+  let titles=pl.slice(0,2).map((item)=>item.title);
+  return titles;
+}
+
+/* 24-10-2025: Hidden Treasure
+Given a 2D array representing a map of the ocean floor that includes a hidden treasure, and an array with the coordinates ([row, column]) for the next dive of your treasure search, return "Empty", "Found", or "Recovered" using the following rules:
+
+The given 2D array will contain exactly one unrecovered treasure, which will occupy multiple cells.
+
+Each cell in the 2D array will contain one of the following values:
+
+"-": No treasure.
+"O": A part of the treasure that has not been found.
+"X": A part of the treasure that has already been found.
+If the dive location has no treasure, return "Empty".
+
+If the dive location finds treasure, but at least one other part of the treasure remains unfound, return "Found".
+
+If the dive location finds the last unfound part of the treasure, return "Recovered".
+
+For example, given:
+
+[
+  [ "-", "X"],
+  [ "-", "X"],
+  [ "-", "O"]
+]
+And [2, 1] for the coordinates of the dive location, return "Recovered" because the dive found the last unfound part of the treasure.
+*/
+
+function dive(map, coordinates) {
+  let fl=map.flat().filter((item)=>item=="O");
+  let p=map[coordinates[0]][coordinates[1]];
+if(p=="-"){
+  return "Empty";
+} else if(p=="X" || fl.length>1){
+  return "Found";
+} else return "Recovered";
+}
+dive([[ "-", "X"], [ "-", "O"], [ "-", "O"]], [1, 1])
+
+/* 25-10-2025 Complementary DNA
+Given a string representing a DNA sequence, return its complementary strand using the following rules:
+
+DNA consists of the letters "A", "C", "G", and "T".
+The letters "A" and "T" complement each other.
+The letters "C" and "G" complement each other.
+For example, given "ACGT", return "TGCA".
+*/
+
+function complementaryDNA(strand) {
+ let t={"A":"T","T":"A","G":"C","C":"G"};
+  return strand.split("").map((item)=>t[item]).join("");
+}
+complementaryDNA("ACGT")
